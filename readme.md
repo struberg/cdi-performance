@@ -12,6 +12,8 @@ Java8:
 * Weld-1.1.9:		607.519 ms
 * Weld-1.1.23:		619.518 ms
 
+* OWB-1.5.0:		     13 ms (no this is NOT a hoax, it's due to our proxy caching ...)
+
 All with Java8. 
 
 Currently trying to run it on other boxes to rule out some misconfiguration 

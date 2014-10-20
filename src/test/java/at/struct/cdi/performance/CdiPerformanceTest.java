@@ -65,6 +65,8 @@ public class CdiPerformanceTest
             }
         });
 
+        System.out.println("count = " + underTest.getCount());
+
         cdiContainer.shutdown();
     }
 
