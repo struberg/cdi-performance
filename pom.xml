@@ -20,6 +20,7 @@
             <groupId>org.apache.deltaspike.cdictrl</groupId>
             <artifactId>deltaspike-cdictrl-api</artifactId>
             <version>${deltaspike.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -69,6 +70,7 @@
                     <groupId>org.apache.deltaspike.cdictrl</groupId>
                     <artifactId>deltaspike-cdictrl-owb</artifactId>
                     <version>${deltaspike.version}</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>
@@ -111,6 +113,7 @@
                     <groupId>org.apache.deltaspike.cdictrl</groupId>
                     <artifactId>deltaspike-cdictrl-owb</artifactId>
                     <version>${deltaspike.version}</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>
@@ -135,6 +138,7 @@
                     <groupId>org.apache.deltaspike.cdictrl</groupId>
                     <artifactId>deltaspike-cdictrl-weld</artifactId>
                     <version>${deltaspike.version}</version>
+                    <scope>test</scope>
                 </dependency>
 
 

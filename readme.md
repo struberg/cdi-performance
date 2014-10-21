@@ -7,16 +7,42 @@ Currently it only fires up 100 concurrent Threads and does 10 Million invocation
 
 
 Java8:
-* OWB-1.2.6:         20.950 ms
 * OWB-1.1.8:        288.030 ms
-* Weld-1.1.9:       607.519 ms
-* Weld-1.1.23:      619.518 ms
-* Weld-2.2.5:       772.458 ms
+* OWB-1.2.6:         20.950 ms
 * OWB-1.5.0:         13 ms (no this is NOT a hoax, it's due to our proxy caching [1]...)
+* Weld-1.1.9.Final  607.519 ms
+* Weld-1.1.23.Final:619.518 ms
+* Weld-2.2.5.Final: 772.458 ms
 
 All with Java8. 
 
 Currently trying to run it on other boxes to rule out some misconfiguration 
+
+
+# disk footprint
+
+I've also collected numbers about the size of all the jars needed:
+
+### OpenWebBeans-1.2.6
+
+<pre>
+$> mvn clean dependency:copy-dependencies -DincludeScope=compile
+$> du -hs target/dependency/
+   952K target/dependency/
+</pre>
+
+One can see that the flexible plugin structure of Apache OpenWebBeans really pays off.
+
+### Weld-2.2.5.Final
+
+<pre>
+$> mvn clean dependency:copy-dependencies -DincludeScope=compile -PWeld -Dweld.version=2.2.5.Final
+$> du -hs target/dependency/
+9,7M    target/dependency/
+</pre>
+
+I think I need to get in touch with Weld folks because most probably not all the parts are really needed.
+
 
 [1] For @ApplicationScoped beans our proxies resolve the contextual instance only once. 
 Thus you get the benefits of a Proxy (serializability, interceptors, decorators, cycle prevention, shield against scope differences)
