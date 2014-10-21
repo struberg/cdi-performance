@@ -16,20 +16,20 @@
  */
 package at.struct.cdi.performance.beans;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
-@ApplicationScoped
-public class SimpleBeanWithoutInterceptor
+@RequestScoped
+public class SimpleRequestScopedBeanWithoutInterceptor
 {
     private AtomicLong count = new AtomicLong(0);
 
     public int theMeaningOfLife()
     {
-        //X comment this in if you cannot believe the f**n speed of OWB-1.5.0! count.incrementAndGet();
+        //X comment this in if you like to see if this really got invoked count.incrementAndGet();
         return 42;
     }
 
