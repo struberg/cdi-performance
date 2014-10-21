@@ -153,6 +153,13 @@
                 <dependency>
                     <groupId>org.jboss.weld</groupId>
                     <artifactId>weld-core</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.jboss.weld</groupId>
+                            <artifactId>weld-core-jsf</artifactId>
+                        </exclusion>
+
+                    </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>org.jboss.weld.se</groupId>
@@ -167,18 +174,6 @@
                     <groupId>org.apache.geronimo.specs</groupId>
                     <artifactId>geronimo-jta_1.1_spec</artifactId>
                     <version>1.0</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.spec.javax.ejb</groupId>
-                    <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>javax.validation</groupId>
-                    <artifactId>validation-api</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>javax.persistence</groupId>
-                    <artifactId>persistence-api</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>javassist</groupId>
