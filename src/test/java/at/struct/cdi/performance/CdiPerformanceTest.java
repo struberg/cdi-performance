@@ -74,11 +74,16 @@ public class CdiPerformanceTest
     {
         Thread[] threads = new Thread[NUM_THREADS];
 
-        long start = System.nanoTime();
         for (int i = 0; i < NUM_THREADS; i++)
         {
             threads[i] = new Thread(runnable);
-            threads[i].run();
+        }
+
+        long start = System.nanoTime();
+
+        for (int i = 0; i < NUM_THREADS; i++)
+        {
+            threads[i].start();
         }
 
         for (int i = 0; i < NUM_THREADS; i++)
