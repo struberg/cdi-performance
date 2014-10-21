@@ -8,10 +8,10 @@ Currently it only fires up 100 concurrent Threads and does 10 Million invocation
 
 Java8:
 * OWB-1.1.8:           currently collecting  ms
-* OWB-1.2.6:               5270 ms
+* OWB-1.2.6:              5.270 ms
 * OWB-1.5.0:                 92 ms (no this is NOT a hoax, it's due to our proxy caching [1]...)
 * Weld-1.1.9.Final     currently collecting  ms
-* Weld-1.1.23.Final:   currently collecting  ms
+* Weld-1.1.23.Final:  1.247.264 ms
 * Weld-2.2.5.Final:    currently collecting  ms
 
 All with Java8. 
