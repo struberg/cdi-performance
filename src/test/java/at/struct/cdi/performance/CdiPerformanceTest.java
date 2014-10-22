@@ -28,6 +28,7 @@ import at.struct.cdi.performance.beans.SimpleRequestScopedBeanWithoutInterceptor
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.cdise.api.ContextControl;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -36,10 +37,11 @@ import org.testng.annotations.Test;
  * A few micro benchmarks for various CDI stuff
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
+@Test(singleThreaded = true)
 public class CdiPerformanceTest
 {
     private static int NUM_THREADS = 100;
-    private static int NUM_ITERATION=50000; //X TODO temporarily moved down from 10 million to speed up development of new tests
+    private static int NUM_ITERATION=1000000;
 
     private volatile CdiContainer cdiContainer;
 
@@ -48,84 +50,87 @@ public class CdiPerformanceTest
     {
         cdiContainer = CdiContainerLoader.getCdiContainer();
         cdiContainer.boot();
+        System.out.println("\n\n");
     }
 
     @AfterClass
     public void shutdown()
     {
         cdiContainer.shutdown();
+
+        System.out.println("\n\n");
     }
 
     @Test
-    public void testPerformance() throws InterruptedException
+    public void testApplicationScopedBeanPerformance() throws InterruptedException
     {
-        System.out.println("\n\n");
 
         // we do this all in one method to make sure we don't kick off those methods in parallel
 
+        final SimpleApplicationScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleApplicationScopedBeanWithoutInterceptor.class);
+        underTest.theMeaningOfLife(); // warmup;
+
+        executeInParallel("invocation on ApplicationScoped bean", new Runnable()
         {
-            final SimpleApplicationScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleApplicationScopedBeanWithoutInterceptor.class);
-            underTest.theMeaningOfLife(); // warmup;
-
-            executeInParallel("invocation on ApplicationScoped bean", new Runnable()
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
+                for (int i = 0; i < NUM_ITERATION; i++)
                 {
-                    for (int i = 0; i < NUM_ITERATION; i++)
-                    {
-                        // this line does the actual bean invocation.
-                        underTest.theMeaningOfLife();
-                    }
+                    // this line does the actual bean invocation.
+                    underTest.theMeaningOfLife();
                 }
-            });
-        }
-
-        {
-            ApplicationScopedHolder applicationScopedHolder = getInstance(cdiContainer.getBeanManager(), ApplicationScopedHolder.class);
-            final SimpleApplicationScopedBeanWithoutInterceptor underTest = applicationScopedHolder.getSimpleBeanWithoutInterceptor();
-            underTest.theMeaningOfLife(); // warmup;
-
-            executeInParallel("invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean", new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    for (int i = 0; i < NUM_ITERATION; i++)
-                    {
-                        // this line does the actual bean invocation.
-                        underTest.theMeaningOfLife();
-                    }
-                }
-            });
-        }
-
-        {
-            final SimpleRequestScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleRequestScopedBeanWithoutInterceptor.class);
-            underTest.theMeaningOfLife(); // warmup;
-
-            executeInParallel("invocation on RequestScoped bean", new Runnable()
-            {
-                ContextControl contextControl = cdiContainer.getContextControl();
-
-                @Override
-                public void run()
-                {
-                    contextControl.startContext(RequestScoped.class);
-                    for (int i = 0; i < NUM_ITERATION; i++)
-                    {
-                        // this line does the actual bean invocation.
-                        underTest.theMeaningOfLife();
-                    }
-                    contextControl.stopContext(RequestScoped.class);
-                }
-            });
-        }
-
-        System.out.println("\n\n");
-
+            }
+        });
     }
 
+    @Test
+    public void testApplicationScopedBeanInjectedIntoAnotherAppScopedBeanPerformance() throws InterruptedException
+
+    {
+        ApplicationScopedHolder applicationScopedHolder = getInstance(cdiContainer.getBeanManager(), ApplicationScopedHolder.class);
+        final SimpleApplicationScopedBeanWithoutInterceptor underTest = applicationScopedHolder.getSimpleBeanWithoutInterceptor();
+        underTest.theMeaningOfLife(); // warmup;
+
+        executeInParallel("invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean", new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    // this line does the actual bean invocation.
+                    underTest.theMeaningOfLife();
+                }
+            }
+        });
+    }
+
+    @Test
+    public void testRequestScopedBeanPerformance() throws InterruptedException
+    {
+        final SimpleRequestScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleRequestScopedBeanWithoutInterceptor.class);
+        final ContextControl contextControl = cdiContainer.getContextControl();
+        contextControl.startContext(RequestScoped.class);
+        Assert.assertEquals(underTest.theMeaningOfLife(), 42);
+        contextControl.stopContext(RequestScoped.class);
+
+        executeInParallel("invocation on @RequestScoped bean", new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                contextControl.startContext(RequestScoped.class);
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    // this line does the actual bean invocation.
+                    underTest.theMeaningOfLife();
+                }
+                contextControl.stopContext(RequestScoped.class);
+            }
+        });
+    }
 
     private void executeInParallel(String testName, Runnable runnable) throws InterruptedException
     {
