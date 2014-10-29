@@ -15,52 +15,52 @@ Default locale: de_DE, platform encoding: UTF-8
 OS name: "mac os x", version: "10.10", arch: "x86_64", family: "mac"
  
 ### OWB-1.2.6
-$> mvn clean install
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 13 ms
-Test invocation on ApplicationScoped bean TOOK: 20 ms
-Test invocation on @RequestScoped bean TOOK: 648 ms
+<pre>$> mvn clean install</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 13 ms
+* Test invocation on ApplicationScoped bean TOOK: 20 ms
+* Test invocation on @RequestScoped bean TOOK: 648 ms
 
 ### OWB-1.2.0
-$> mvn clean install -Dowb.version=1.2.0
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 40 ms
-Test invocation on ApplicationScoped bean TOOK: 18 ms
-Test invocation on @RequestScoped bean TOOK: 918 ms
+<pre>$> mvn clean install -Dowb.version=1.2.0</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 40 ms
+* Test invocation on ApplicationScoped bean TOOK: 18 ms
+* Test invocation on @RequestScoped bean TOOK: 918 ms
 
 ### OWB-1.1.6
-$> mvn clean install -Dowb.version=1.1.6
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 7138 ms
-Test invocation on ApplicationScoped bean TOOK: 7008 ms
-Test invocation on @RequestScoped bean TOOK: 11979 ms
+<pre>$> mvn clean install -Dowb.version=1.1.6</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 7138 ms
+* Test invocation on ApplicationScoped bean TOOK: 7008 ms
+* Test invocation on @RequestScoped bean TOOK: 11979 ms
 
-### OWB-1.1.8
-$> mvn clean install -Dowb.version=1.1.8
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 7192 ms
-Test invocation on ApplicationScoped bean TOOK: 6914 ms
-Test invocation on @RequestScoped bean TOOK: 12111 ms
+### OWB-1.1.8<pre>
+<pre>$> mvn clean install -Dowb.version=1.1.8</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 7192 ms
+* Test invocation on ApplicationScoped bean TOOK: 6914 ms
+* Test invocation on @RequestScoped bean TOOK: 12111 ms
 
 ### OWB-1.5.0-SNAPSHOT (CDI-1.2)
-$> mvn clean install -POWB15 -Dowb.version=1.5.0-SNAPSHOT
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 23 ms
-Test invocation on ApplicationScoped bean TOOK: 18 ms
-Test invocation on @RequestScoped bean TOOK: 625 ms
+<pre>$> mvn clean install -POWB15 -Dowb.version=1.5.0-SNAPSHOT</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 23 ms
+* Test invocation on ApplicationScoped bean TOOK: 18 ms
+* Test invocation on @RequestScoped bean TOOK: 625 ms
 
 ### Weld-1.1.23.Final
-$> mvn clean install -PWeld -Dweld.version=1.1.23.Final
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 16258 ms
-Test invocation on ApplicationScoped bean TOOK: 15447 ms
-Test invocation on @RequestScoped bean TOOK: 2592 ms
-
-### Weld-2.2.6.Final
-$> mvn clean install -PWeld
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 17751 ms
-Test invocation on ApplicationScoped bean TOOK: 16916 ms
-Test invocation on @RequestScoped bean TOOK: 2593 ms
+<pre>$> mvn clean install -PWeld -Dweld.version=1.1.23.Final</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 16258 ms
+* Test invocation on ApplicationScoped bean TOOK: 15447 ms
+* Test invocation on @RequestScoped bean TOOK: 2592 ms
 
 ### Weld-2.2.5.Final
-$> mvn clean install -PWeld -Dweld.version=2.2.5.Final
-Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 18408 ms
-Test invocation on ApplicationScoped bean TOOK: 17812 ms
-Test invocation on @RequestScoped bean TOOK: 2552 ms
+<pre>$> mvn clean install -PWeld -Dweld.version=2.2.5.Final</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 18408 ms
+* Test invocation on ApplicationScoped bean TOOK: 17812 ms
+* Test invocation on @RequestScoped bean TOOK: 2552 ms
+
+### Weld-2.2.6.Final
+<pre>$> mvn clean install -PWeld -Dweld.version=2.2.6.Final</pre>
+* Test invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean TOOK: 17751 ms
+* Test invocation on ApplicationScoped bean TOOK: 16916 ms
+* Test invocation on @RequestScoped bean TOOK: 2593 ms
 
 
 
