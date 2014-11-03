@@ -61,10 +61,9 @@ public class CdiPerformanceTest
         System.out.println("\n\n");
     }
 
-    @Test
+    @Test(priority = 1)
     public void testApplicationScopedBeanPerformance() throws InterruptedException
     {
-
         // we do this all in one method to make sure we don't kick off those methods in parallel
 
         final SimpleApplicationScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleApplicationScopedBeanWithoutInterceptor.class);
@@ -84,7 +83,7 @@ public class CdiPerformanceTest
         });
     }
 
-    @Test
+    @Test(priority = 2)
     public void testApplicationScopedBeanInjectedIntoAnotherAppScopedBeanPerformance() throws InterruptedException
 
     {
@@ -106,7 +105,7 @@ public class CdiPerformanceTest
         });
     }
 
-    @Test
+    @Test(priority = 3)
     public void testRequestScopedBeanPerformance() throws InterruptedException
     {
         final SimpleRequestScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleRequestScopedBeanWithoutInterceptor.class);
@@ -131,6 +130,8 @@ public class CdiPerformanceTest
             }
         });
     }
+
+
 
     private void executeInParallel(String testName, Runnable runnable) throws InterruptedException
     {
