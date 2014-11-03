@@ -1,0 +1,5 @@
+<beans>
+    <interceptors>
+        <class>at.struct.cdi.performance.interceptor.NopInterceptor</class>
+    </interceptors>
+</beans>

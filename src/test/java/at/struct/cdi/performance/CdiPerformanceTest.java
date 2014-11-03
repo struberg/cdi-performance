@@ -23,6 +23,8 @@ import javax.enterprise.inject.spi.BeanManager;
 import java.util.concurrent.TimeUnit;
 
 import at.struct.cdi.performance.beans.ApplicationScopedHolder;
+import at.struct.cdi.performance.beans.ClassInterceptedBean;
+import at.struct.cdi.performance.beans.MethodInterceptedBean;
 import at.struct.cdi.performance.beans.SimpleApplicationScopedBeanWithoutInterceptor;
 import at.struct.cdi.performance.beans.SimpleRequestScopedBeanWithoutInterceptor;
 import org.apache.deltaspike.cdise.api.CdiContainer;
@@ -64,10 +66,7 @@ public class CdiPerformanceTest
     @Test(priority = 1)
     public void testApplicationScopedBeanPerformance() throws InterruptedException
     {
-        // we do this all in one method to make sure we don't kick off those methods in parallel
-
         final SimpleApplicationScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleApplicationScopedBeanWithoutInterceptor.class);
-        underTest.theMeaningOfLife(); // warmup;
 
         executeInParallel("invocation on ApplicationScoped bean", new Runnable()
         {
@@ -85,11 +84,9 @@ public class CdiPerformanceTest
 
     @Test(priority = 2)
     public void testApplicationScopedBeanInjectedIntoAnotherAppScopedBeanPerformance() throws InterruptedException
-
     {
         ApplicationScopedHolder applicationScopedHolder = getInstance(cdiContainer.getBeanManager(), ApplicationScopedHolder.class);
         final SimpleApplicationScopedBeanWithoutInterceptor underTest = applicationScopedHolder.getSimpleBeanWithoutInterceptor();
-        underTest.theMeaningOfLife(); // warmup;
 
         executeInParallel("invocation on @ApplicationScoped bean which got injected into another @ApplicationScoped bean", new Runnable()
         {
@@ -131,10 +128,70 @@ public class CdiPerformanceTest
         });
     }
 
+    @Test(priority = 4)
+    public void testApplicationScopeClassInterceptedPerformance() throws InterruptedException
+    {
+        final ClassInterceptedBean underTest = getInstance(cdiContainer.getBeanManager(), ClassInterceptedBean.class);
+
+        executeInParallel("invocation on ClassIntercepted bean", new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    // this line does the actual bean invocation.
+                    underTest.getMeaningOfLife();
+                }
+            }
+        });
+    }
+
+    @Test(priority = 4)
+    public void testApplicationScopeMethodInterceptedPerformance() throws InterruptedException
+    {
+        final MethodInterceptedBean underTest = getInstance(cdiContainer.getBeanManager(), MethodInterceptedBean.class);
+
+        executeInParallel("invocation on intercepted method of MethodInterceptedBean", new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    // this line does the actual bean invocation.
+                    underTest.getMeaningOfLife();
+                }
+            }
+        });
+    }
+
+    @Test(priority = 5)
+    public void testApplicationScopeNonInterceptedMethodPerformance() throws InterruptedException
+    {
+        final MethodInterceptedBean underTest = getInstance(cdiContainer.getBeanManager(), MethodInterceptedBean.class);
+
+        executeInParallel("invocation on NON-intercepted method of MethodInterceptedBean", new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    // this line does the actual bean invocation.
+                    underTest.getMeaningOfHalfLife();
+                }
+            }
+        });
+    }
+
 
 
     private void executeInParallel(String testName, Runnable runnable) throws InterruptedException
     {
+        // do the warmup
+        runnable.run();
+
         Thread[] threads = new Thread[NUM_THREADS];
 
         for (int i = 0; i < NUM_THREADS; i++)
