@@ -36,7 +36,24 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
- * A few micro benchmarks for various CDI stuff
+ * A few micro benchmarks for various CDI stuff.
+ *
+ * <p>The {@link #executeInParallel(String, Runnable)} first does a single run() on the
+ * Runnable as warmup and then spawns up {@link #NUM_THREADS} parallel Threads to do
+ * the real benchmarking.</p>
+ *
+ * <p>Please note that Java microbenchmarks always vary to some degree as garbage collection
+ * and threading is not 100% reproducible. It nonetheless gives a decent hint about
+ * the performance of CDI containers.</p>
+ *
+ * <p>Please always keep in mind that we are dealing with 1 billion invocations on our test
+ * objects and in practice most of the performance is lost on the database, remote calls, etc.<br>
+ * Those numbers are much more interesting if you heavily deal with ExpressionLanguage invocations
+ * on CDI beans. Due to the tree nature of EL you can quickly get a few 10.000 invocations per page
+ * hit. On big pages I measured up to 300.000 EL invocations on beans
+ * (big h:dataTable with many columns). In those situations the performance of the CDI container
+ * might make the difference between 100ms and a few seconds rendering time of your page.</p>
+ *
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @Test(singleThreaded = true)
