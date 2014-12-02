@@ -8,7 +8,7 @@
     <properties>
         <owb.version>1.2.6</owb.version>
 
-        <weld.version>2.2.6.Final</weld.version>
+        <weld.version>2.2.7.Final</weld.version>
 
         <deltaspike.version>1.0.4-SNAPSHOT</deltaspike.version>
     </properties>
@@ -145,6 +145,36 @@
             </dependencies>
 
         </profile>
+        
+        <profile>
+            <id>Weld3</id>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jboss.weld</groupId>
+                        <artifactId>weld-core-bom</artifactId>
+                        <version>${weld.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                    <version>${deltaspike.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-shaded</artifactId>
+                </dependency>
+            </dependencies>
+
+        </profile>
+        
     </profiles>
 
     <build>
