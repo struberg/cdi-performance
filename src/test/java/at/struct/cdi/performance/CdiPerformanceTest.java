@@ -27,6 +27,7 @@ import at.struct.cdi.performance.beans.ClassInterceptedBean;
 import at.struct.cdi.performance.beans.MethodInterceptedBean;
 import at.struct.cdi.performance.beans.SimpleApplicationScopedBeanWithoutInterceptor;
 import at.struct.cdi.performance.beans.SimpleRequestScopedBeanWithoutInterceptor;
+import at.struct.cdi.performance.events.MySimpleEvent;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.cdise.api.ContextControl;
@@ -85,7 +86,7 @@ public class CdiPerformanceTest
     {
         final SimpleApplicationScopedBeanWithoutInterceptor underTest = getInstance(cdiContainer.getBeanManager(), SimpleApplicationScopedBeanWithoutInterceptor.class);
 
-        executeInParallel("invocation on ApplicationScoped bean", new Runnable()
+        executeInParallel("invocation on @ApplicationScoped bean", new Runnable()
         {
             @Override
             public void run()
@@ -202,6 +203,24 @@ public class CdiPerformanceTest
         });
     }
 
+    @Test(priority = 6)
+    public void testEventPerformance() throws Exception
+    {
+        final MySimpleEvent simpleEvent = new MySimpleEvent();
+        final BeanManager beanManager = cdiContainer.getBeanManager();
+
+        executeInParallel("event observer", new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (int i = 0; i < NUM_ITERATION; i++)
+                {
+                    beanManager.fireEvent(simpleEvent);
+                }
+            }
+        });
+    }
 
 
     private void executeInParallel(String testName, Runnable runnable) throws InterruptedException
