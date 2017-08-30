@@ -214,7 +214,8 @@ public class CdiPerformanceTest
             @Override
             public void run()
             {
-                for (int i = 0; i < NUM_ITERATION; i++)
+                int iterations = NUM_ITERATION/5;
+                for (int i = 0; i < iterations; i++)
                 {
                     beanManager.fireEvent(simpleEvent);
                 }
